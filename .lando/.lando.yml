@@ -1,0 +1,36 @@
+name: %PROJECT_NAME%
+recipe: wordpress
+
+config:
+  php: "8.2"
+  via: nginx
+  webroot: web
+  database: "mariadb:10.5"
+  composer_version: 2
+  xdebug: off
+  config:
+    database: .lando/my.cnf
+
+tooling:
+  composer:
+    description: "Runs Composer commands"
+    cmd:
+      - appserver: /usr/local/bin/composer
+
+services:
+  appserver:
+    build:
+      - "composer install"
+
+    run_as_root:
+      - ln -snf /usr/share/zoneinfo/Europe/Helsinki /etc/localtime
+      - echo "Europe/Helsinki" > /etc/timezone
+
+  cache:
+    type: redis:7
+    portforward: 6379
+
+env_file:
+  - .lando/.env
+  # uncomment when you need a personal .env file which is not committed to the repository
+  # - .env
