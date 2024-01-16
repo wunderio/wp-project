@@ -1,0 +1,7 @@
+{
+    "name": "wunderio/wp-project",
+    "type": "project",
+    "description": "Wunder's template for WordPress projects.",
+    "license": "GPL-2.0-or-later",
+    "authors": []
+}

@@ -64,6 +64,10 @@ composer_scripts_add "setup-drop-ins" "ln -fs \$(pwd)/web/app/plugins/query-moni
 composer_scripts_add "post-install-cmd" "@setup-drop-ins"
 composer_scripts_add "post-update-cmd" "@setup-drop-ins"
 
+# Merge our composer.json with the Bedrock composer.json
+jq -s ".[0] * .[1]" "composer.json" "../resources/composer.json" > composer.json.tmp
+mv composer.json.tmp composer.json
+
 # Move all to root directory
 cp -r * ../
 cd ../
