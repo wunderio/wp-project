@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -xeuo pipefail
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin
+
 echo "Let's create a new WordPress project"
 echo
 
