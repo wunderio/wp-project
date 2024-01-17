@@ -67,13 +67,11 @@ composer_scripts_add "post-update-cmd" "@setup-drop-ins"
 jq -s ".[0] * .[1]" "composer.json" "../resources/composer.json" > composer.json.tmp
 mv composer.json.tmp composer.json
 
-cat composer.json
-
 composer config --no-plugins allow-plugins.koodimonni/composer-dropin-installer true
 
 # Install some packages
 composer require -n \
-    php ">=8.2" \
+    php ">=8.1" \
     wp-cli/wp-cli-bundle \
     wpackagist-plugin/redis-cache \
     wpackagist-plugin/query-monitor \
