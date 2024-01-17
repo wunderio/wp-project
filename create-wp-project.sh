@@ -37,9 +37,6 @@ cd temp
 # Patch application.php to use dynamic URLs with resources/application.php.patch.1
 patch -p1 -N < ../resources/application.php.patch.1
 
-# Install some packages
-composer require wp-cli/wp-cli-bundle wpackagist-plugin/redis-cache wpackagist-plugin/query-monitor
-
 # Define a function to append a value to composer.json scripts array of a given key (or create it if it doesn't exist)
 function composer_scripts_add {
     local KEY="$1"
@@ -69,6 +66,19 @@ composer_scripts_add "post-update-cmd" "@setup-drop-ins"
 # Merge our composer.json with the Bedrock composer.json
 jq -s ".[0] * .[1]" "composer.json" "../resources/composer.json" > composer.json.tmp
 mv composer.json.tmp composer.json
+
+cat composer.json
+
+composer config --no-plugins allow-plugins.koodimonni/composer-dropin-installer true
+
+# Install some packages
+composer require -n \
+    php ">=8.2" \
+    wp-cli/wp-cli-bundle \
+    wpackagist-plugin/redis-cache \
+    wpackagist-plugin/query-monitor \
+    koodimonni-language/core-fi \
+    koodimonni/composer-dropin-installer
 
 # Move all to root directory
 cp -r * ../

@@ -3,5 +3,52 @@
     "type": "project",
     "description": "Wunder's template for WordPress projects.",
     "license": "GPL-2.0-or-later",
-    "authors": []
+    "authors": [],
+    "repositories": {
+        "wpackagist": {
+            "type": "composer",
+            "url": "https://wpackagist.org",
+            "only": [
+                "wpackagist-plugin/*",
+                "wpackagist-theme/*"
+            ]
+        },
+        "koodimonni-language": {
+            "type": "composer",
+            "url": "https://wp-languages.github.io",
+            "only": [
+                "koodimonni-language/*",
+                "koodimonni-plugin-language/*",
+                "koodimonni-theme-language/*"
+            ]
+        }
+    },
+    "extra": {
+        "dropin-paths": {
+            "web/app/": [
+                "package:wpackagist-plugin/redis-cache:includes/object-cache.php",
+                "type:wordpress-dropin"
+            ],
+            "web/app/languages/": [
+                "vendor:koodimonni-language"
+            ],
+            "web/app/languages/plugins/": [
+                "vendor:koodimonni-plugin-language"
+            ],
+            "web/app/languages/themes/": [
+                "vendor:koodimonni-theme-language"
+            ]
+        }
+    },
+    "scripts": {
+        "setup-drop-ins": [
+            "ln -fs $(pwd)/web/app/plugins/query-monitor/wp-content/db.php web/app/db.php"
+        ],
+        "post-install-cmd": [
+            "@setup-drop-ins"
+        ],
+        "post-update-cmd": [
+            "@setup-drop-ins"
+        ]
+    }
 }
