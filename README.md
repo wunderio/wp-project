@@ -2,7 +2,7 @@
 
 This repository builds a new WordPress project based on the popular [Bedrock boilerplate](https://github.com/roots/bedrock/), configured to automatically deploy code to a [Kubernetes](https://kubernetes.io/) cluster using [CircleCI](https://circleci.com/).
 
-## Prequisites
+## Prerequisites
 
 You need to have [Composer](https://getcomposer.org/), [jq](https://github.com/jqlang/jq) and [Lando](https://lando.dev/) installed before creating a project.
 
