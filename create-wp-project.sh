@@ -6,7 +6,7 @@ echo "Let's create a new WordPress project"
 echo
 
 # Check for dependencies
-declare -a DEPENDENCIES=("composer" "jq" "lando")
+declare -a DEPENDENCIES=("composer" "jq")
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
     if ! command -v $DEPENDENCY &> /dev/null; then
@@ -34,8 +34,9 @@ composer create-project roots/bedrock temp
 # Move into the temporary directory
 cd temp
 
-# Patch application.php to use dynamic URLs with resources/application.php.patch.1
+# Patch application.php
 patch -p1 -N < ../resources/application.php.patch.1
+patch -p1 -N < ../resources/application.php.patch.2
 
 # Define a function to append a value to composer.json scripts array of a given key (or create it if it doesn't exist)
 function composer_scripts_add {
@@ -84,7 +85,7 @@ cd ../
 rm -rf temp
 
 # Replace the domain name in the Lando config
-sed -i '' "s/%PROJECT_NAME%/$DOMAIN_NAME/g" .lando/.lando.yml
+sed -i '' "s/PROJECTNAME/$DOMAIN_NAME/g" .lando.yml
 
 # Move the Lando config to the root directory
 mv .lando/.lando.yml .

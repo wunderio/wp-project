@@ -1,0 +1,83 @@
+
+# Enable autoscaling for production.
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+
+# Don't delay the production deployment process to create the reference data.
+referenceData:
+  updateAfterDeployment: false
+
+# Enable daily backups.
+backup:
+  enabled: true
+
+php:
+  cron:
+    drupal:
+      # In production environments, run cron every 5 minutes. Adjust as needed.
+      schedule: '*/5 * * * *'
+  # Reserve more resources for our PHP containers.
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256M
+    limits:
+      cpu: 500m
+      memory: 512M
+  # Don't show errors in production.
+  errorLevel: "hide"
+
+nginx:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 50M
+    limits:
+      cpu: 100m
+      memory: 150M
+# Uncomment these lines to disable basic auth protection.
+# basicauth:
+#   enabled: false
+
+mariadb:
+  master:
+    persistence:
+      # Database storage disk space allocation
+      # Request assistance from ops team after changing this on existing deployment.
+      size: 5Gi
+    resources:
+      requests:
+        cpu: 250m
+        memory: 500M
+      limits:
+        cpu: 1000m
+        memory: 750M
+
+# Consider enabling memcached service
+# memcached:
+#   enabled: true
+
+# Connect to an externally hosted database.
+#  env:
+#    DB_HOST: 'hosted.database.server.com'
+#    DB_NAME: 'drupal-1A4G3C'
+#    DB_USER: 'drupal'
+#    DB_PASS: 'never store passwords'
+# Disable the built-in database when using an external database.
+#mariadb:
+#  enabled: false
+
+varnish:
+  enabled: true
+  resources:
+    requests:
+      cpu: 50m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+  # See https://varnish-cache.org/docs/6.6/users-guide/storage-backends.html
+  # Disc allocated storage.
+  storageBackend: 'file,/var/lib/varnish/varnish_storage.bin,512M'

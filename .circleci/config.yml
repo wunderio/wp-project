@@ -1,0 +1,80 @@
+version: 2.1
+
+orbs:
+  silta: silta/silta@1
+
+executors:
+  cicd81:
+    docker:
+      - image: wunderio/silta-cicd:circleci-php8.1-node16-composer2-v1
+
+workflows:
+  commit:
+    jobs:
+      - silta/drupal-validate:
+          name: validate
+          executor: cicd81
+          post-validation:
+            - run: echo "You can add additional validation here!"
+
+      - silta/analyze:
+          name: analyze
+          context: analyze
+          sources: web
+
+      # Build and deploy job for feature environments.
+      # Other jobs defined below extend this job.
+      - silta/drupal-build-deploy: &build-deploy
+          name: build-deploy
+          executor: cicd81
+          codebase-build:
+            - silta/drupal-composer-install
+            - silta/npm-install-build
+            - silta/decrypt-files:
+                files: silta/silta.secret
+                # SEC_DRUPAL_PROJECT_SILTA_DEV holds the secret key for decryption purposes.
+                # This is stored in CircleCI as an environment variable and also in LastPass.
+                secret_key_env: SEC_DRUPAL_PROJECT_SILTA_DEV
+          silta_config: silta/silta.yml,silta/silta.secret
+          context: silta_dev
+          requires:
+            - validate
+            - analyze
+          filters:
+            branches:
+              ignore:
+                - production
+                - main
+                - /dependabot\/.*/
+
+      # Build and deploy job for main environment.
+      # Extends the job defined for feature environments.
+      - silta/drupal-build-deploy:
+          <<: *build-deploy
+          name: build-deploy-main
+          silta_config: silta/silta.yml,silta/silta.secret,silta/silta-main.yml
+          filters:
+            branches:
+              only:
+                - main
+
+      # Build and deploy job for production environment.
+      # Extends the job defined for feature environments.
+      - silta/drupal-build-deploy:
+          <<: *build-deploy
+          name: build-deploy-prod
+          silta_config: silta/silta.yml,silta/silta-prod.yml
+          context: silta_finland
+          filters:
+            branches:
+              only: production
+
+      # This enables validation on dependabot PRs
+      #- silta/drupal-build-deploy:
+      #    <<: *build-deploy
+      #    name: build-dependabot
+      #    context: silta_dev
+      #    skip-deployment: true
+      #    filters:
+      #      branches:
+      #        only: /dependabot\/.*/

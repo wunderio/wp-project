@@ -1,0 +1,37 @@
+
+# Values in this file override the default values of our helm chart.
+#
+# See https://github.com/wunderio/charts/blob/master/drupal/values.yaml
+# for all possible options.
+
+php:
+  drupalCoreVersion: "10"
+  cron:
+    drupal:
+      # Disable cron jobs in feature environments by using non-existing date.
+      # The ~ symbol will be replaced by a random digit from 0 to 9.
+      # This will avoid running all cron jobs at the same time.
+      schedule: '~ 0 31 2 *'
+
+# Configure reference data that will be used when creating new environments.
+referenceData:
+  # The name of the environment from which reference data will be copied.
+  referenceEnvironment: 'main'
+
+# Configure Google Filestore volume for files storage.
+mounts:
+  public-files:
+    enabled: true
+    storage: 10G
+    mountPath: /app/web/sites/default/files
+    storageClassName: nfs-shared
+  private-files:
+    enabled: true
+    storage: 1G
+    mountPath: /app/private
+    storageClassName: nfs-shared
+
+varnish:
+  # See https://github.com/wunderio/silta/blob/master/docs/silta-examples.md#using-varnish
+  # to configure varnish for Your site correctly.
+  enabled: true

@@ -4,14 +4,10 @@ This repository builds a new WordPress project based on the popular [Bedrock boi
 
 ## Prequisites
 
-You need to have [Composer](https://getcomposer.org/), [jq](https://github.com/jqlang/jq) and [Lando](https://lando.dev/) installed before creating a project.
+You need to have Lando](https://lando.dev/) installed before creating a project.
 
 ## Getting started
 
-Create a new project using Composer:
-
-```
-$ composer create-project wunderio/wp-project project-name
-```
+Just use `lando start` to initialize the project.
 
 The project automatically clones the latest version of the Bedrock boilerplate and adds Wunder-specific additions to it. The script also asks for some additional information like the wanted local domain name etc. during the creation.
