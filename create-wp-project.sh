@@ -28,6 +28,9 @@ if [ -z "$DOMAIN_NAME" ]; then
     DOMAIN_NAME=$PROJECT_NAME
 fi
 
+# Replace the domain name in the Lando config
+sed -i '' "s/PROJECTNAME/$DOMAIN_NAME/g" .lando.yml
+
 # Install the Bedrock WordPress boilerplate
 composer create-project roots/bedrock temp
 
@@ -83,12 +86,6 @@ composer require -n \
 cp -r * ../
 cd ../
 rm -rf temp
-
-# Replace the domain name in the Lando config
-sed -i '' "s/PROJECTNAME/$DOMAIN_NAME/g" .lando.yml
-
-# Move the Lando config to the root directory
-mv .lando/.lando.yml .
 
 # Remove this script
 rm create-wp-project.sh
