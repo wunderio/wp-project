@@ -25,5 +25,9 @@ services:
   cache:
     type: 'redis:7'
     portforward: 6379
+  mailhog:
+    type: mailhog
+    hogfrom:
+      - appserver
 env_file:
   - .lando/.env

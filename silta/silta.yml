@@ -1,18 +1,64 @@
 
 # Values in this file override the default values of our helm chart.
 #
-# See https://github.com/wunderio/charts/blob/master/drupal/values.yaml
+# See https://github.com/wunderio/charts/blob/master/frontend/values.yaml
 # for all possible options.
 
-# Configure reference data that will be used when creating new environments.
-referenceData:
-  # The name of the environment from which reference data will be copied.
-  referenceEnvironment: 'main'
+timezone: Europe/Helsinki
+
+nginx:
+  locationExtraConfig: |
+    location ~ \.php$ {
+      try_files $uri @php;
+    }
+
+  serverExtraConfig: |
+    rewrite ^/(wp-.*.php)$ /wp/$1 last;
+    rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
+
+    # Workaround for index pages
+    rewrite ^/$ /index.php break;
+    rewrite ^/wp/wp-admin/?$ /wp/wp-admin/index.php break;
+
+    location @php {
+      internal;
+      include fastcgi.conf;
+      fastcgi_split_path_info ^(.+\.php)(/.+)$;
+      fastcgi_index index.php;
+      include fastcgi_params;
+      fastcgi_param REQUEST_URI $request_uri;
+      fastcgi_param SCRIPT_FILENAME /app/web/$fastcgi_script_name;
+      fastcgi_param PATH_INFO $fastcgi_path_info;
+      fastcgi_pass {{ .Release.Name }}-php:9000;
+    }
+
+mariadb:
+  enabled: true
+
+# elasticsearch:
+#   enabled: true
+
+services:
+  static:
+    image: nginx:1.25-alpine
+    exposedRoute: '/'
+    port: 80
+    mounts:
+      - uploads
+
+  php:
+    port: 9000
+    mounts:
+      - uploads
+
+  redis:
+    image: redis:6-alpine
+    port: 6379
 
 # Configure Google Filestore volume for files storage.
 mounts:
-  public-files:
+  uploads:
     enabled: true
     storage: 10G
-    mountPath: /app/web/uploads
+    mountPath: /app/web/app/uploads/
     storageClassName: nfs-shared

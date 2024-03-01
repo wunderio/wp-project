@@ -1,15 +1,19 @@
 --- a/config/application.php
 +++ b/config/application.php
-@@ -98,6 +98,15 @@ if (env('DATABASE_URL')) {
+@@ -98,6 +98,19 @@ if (env('DATABASE_URL')) {
      Config::define('DB_HOST', isset($dsn->port) ? "{$dsn->host}:{$dsn->port}" : $dsn->host);
  }
 
 +/**
 + * Redis settings
 + */
-+Config::define('WP_REDIS_DISABLED', env('REDIS_DISABLED'));
-+Config::define('WP_REDIS_HOST', env('REDIS_HOST') ?: '127.0.0.1');
-+Config::define('WP_REDIS_PORT', env('REDIS_PORT') ?: '6379');
++$redis_host = env('redis_HOST') ?: 'cache:6379';
++
++$redis_parsed = explode( ':', $redis_host );
++
++Config::define('WP_REDIS_DISABLED', false);
++Config::define('WP_REDIS_HOST', $redis_parsed[0] ?: '127.0.0.1');
++Config::define('WP_REDIS_PORT', $redis_parsed[1] ?: '6379');
 +Config::define('WP_REDIS_DATABASE', env('REDIS_DATABASE') ?: '0');
 +Config::define('WP_REDIS_PASSWORD', env('REDIS_PASS') ?: '');
 +

@@ -16,22 +16,22 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
 done
 
 # Get the current directory name and use it as the project name default
-PROJECT_NAME=${PWD##*/}
+#PROJECT_NAME=${PWD##*/}
 
 # Ask the user for the Lando domain name
-echo "Enter a domain name prefix for Lando [$PROJECT_NAME]: "
-read DOMAIN_NAME
-echo
+# echo "Enter a domain name prefix for Lando [$PROJECT_NAME]: "
+# read DOMAIN_NAME
+# echo
 
-# If the user didn't enter a domain name, use the project name
-if [ -z "$DOMAIN_NAME" ]; then
-    DOMAIN_NAME=$PROJECT_NAME
-fi
+# # If the user didn't enter a domain name, use the project name
+# if [ -z "$DOMAIN_NAME" ]; then
+#     DOMAIN_NAME=$PROJECT_NAME
+# fi
 
-# Replace the domain name in the Lando config
-sed -i '' "s/PROJECTNAME/$DOMAIN_NAME/g" .lando.yml
+# # Replace the domain name in the Lando config
+# sed -i '' "s/PROJECTNAME/$DOMAIN_NAME/g" .lando.yml
 
-# Install the Bedrock WordPress boilerplate
+# # Install the Bedrock WordPress boilerplate
 composer create-project roots/bedrock temp
 
 # Move into the temporary directory
@@ -80,7 +80,8 @@ composer require -n \
     wpackagist-plugin/redis-cache \
     wpackagist-plugin/query-monitor \
     koodimonni-language/core-fi \
-    koodimonni/composer-dropin-installer
+    koodimonni/composer-dropin-installer \
+    10up/elasticpress
 
 # Move all to root directory
 cp -r * ../
