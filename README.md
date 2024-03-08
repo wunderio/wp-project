@@ -4,10 +4,10 @@ This repository builds a new WordPress project based on the popular [Bedrock boi
 
 ## Prequisites
 
-You need to have Lando](https://lando.dev/) installed before creating a project.
+You need to have [Lando](https://lando.dev/) installed before creating a project.
 
 ## Getting started
 
 Just use `lando start` to initialize the project.
 
-The project automatically clones the latest version of the Bedrock boilerplate and adds Wunder-specific additions to it. The script also asks for some additional information like the wanted local domain name etc. during the creation.
+The project automatically clones the latest version of the Bedrock boilerplate and adds Wunder-specific additions to it.

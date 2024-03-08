@@ -16,9 +16,9 @@ nginx:
     rewrite ^/(wp-.*.php)$ /wp/$1 last;
     rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
 
-    # Workaround for index pages
-    rewrite ^/$ /index.php break;
+    rewrite ^/wp-json /index.php?q=$uri&$args break;
     rewrite ^/wp/wp-admin/?$ /wp/wp-admin/index.php break;
+    rewrite /$ /index.php?q=$uri&$args break;
 
     location @php {
       internal;
@@ -48,6 +48,8 @@ services:
 
   php:
     port: 9000
+    env:
+      WP_ENV: development
     mounts:
       - uploads
 

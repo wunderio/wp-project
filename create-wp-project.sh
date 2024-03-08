@@ -40,6 +40,7 @@ cd temp
 # Patch application.php
 patch -p1 -N < ../resources/application.php.patch.1
 patch -p1 -N < ../resources/application.php.patch.2
+patch -p1 -N < ../resources/application.php.patch.3
 
 # Define a function to append a value to composer.json scripts array of a given key (or create it if it doesn't exist)
 function composer_scripts_add {

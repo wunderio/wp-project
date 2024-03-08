@@ -14,10 +14,8 @@ backup:
   enabled: true
 
 php:
-  cron:
-    drupal:
-      # In production environments, run cron every 5 minutes. Adjust as needed.
-      schedule: '*/5 * * * *'
+  env:
+      WP_ENV: production
   # Reserve more resources for our PHP containers.
   resources:
     requests:
