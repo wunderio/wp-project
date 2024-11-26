@@ -15,24 +15,13 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
     fi
 done
 
-# Get the current directory name and use it as the project name default
-#PROJECT_NAME=${PWD##*/}
-
-# Ask the user for the Lando domain name
-# echo "Enter a domain name prefix for Lando [$PROJECT_NAME]: "
-# read DOMAIN_NAME
-# echo
-
-# # If the user didn't enter a domain name, use the project name
-# if [ -z "$DOMAIN_NAME" ]; then
-#     DOMAIN_NAME=$PROJECT_NAME
-# fi
-
-# # Replace the domain name in the Lando config
-# sed -i '' "s/PROJECTNAME/$DOMAIN_NAME/g" .lando.yml
+git config --global --add safe.directory '*'
 
 # # Install the Bedrock WordPress boilerplate
 composer create-project roots/bedrock temp
+
+# Give temporary directory permissions
+chmod 777 temp
 
 # Move into the temporary directory
 cd temp
@@ -40,7 +29,6 @@ cd temp
 # Patch application.php
 patch -p1 -N < ../resources/application.php.patch.1
 patch -p1 -N < ../resources/application.php.patch.2
-patch -p1 -N < ../resources/application.php.patch.3
 
 # Define a function to append a value to composer.json scripts array of a given key (or create it if it doesn't exist)
 function composer_scripts_add {
@@ -75,7 +63,7 @@ mv composer.json.tmp composer.json
 composer config --no-plugins allow-plugins.koodimonni/composer-dropin-installer true
 
 # Install some packages
-composer require -n \
+yes | composer require -n \
     php ">=8.1" \
     wp-cli/wp-cli-bundle \
     wpackagist-plugin/redis-cache \

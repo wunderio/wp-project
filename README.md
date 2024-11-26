@@ -8,6 +8,6 @@ You need to have [Lando](https://lando.dev/) installed before creating a project
 
 ## Getting started
 
-Just use `lando start` to initialize the project.
+Update the project name to `.lando.yml` and then just use `lando start` to initialize the project.
 
 The project automatically clones the latest version of the Bedrock boilerplate and adds Wunder-specific additions to it.
