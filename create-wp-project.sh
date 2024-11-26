@@ -63,7 +63,7 @@ mv composer.json.tmp composer.json
 composer config --no-plugins allow-plugins.koodimonni/composer-dropin-installer true
 
 # Install some packages
-yes | composer require -n \
+composer require -n \
     php ">=8.1" \
     wp-cli/wp-cli-bundle \
     wpackagist-plugin/redis-cache \
