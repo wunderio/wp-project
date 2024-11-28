@@ -1,7 +1,7 @@
 name: PROJECTNAME
 recipe: wordpress
 config:
-  php: '8.2'
+  php: '8.3'
   via: nginx
   webroot: web
   database: 'mariadb:10.5'
