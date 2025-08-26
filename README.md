@@ -2,7 +2,7 @@
 
 This repository builds a new WordPress project based on the popular [Bedrock boilerplate](https://github.com/roots/bedrock/), configured to automatically deploy code to a [Kubernetes](https://kubernetes.io/) cluster using [CircleCI](https://circleci.com/).
 
-## Prequisites
+## Prerequisites
 
 You need to have [Lando](https://lando.dev/) installed before creating a project.
 
@@ -10,4 +10,8 @@ You need to have [Lando](https://lando.dev/) installed before creating a project
 
 Update the project name to `.lando.yml` and then just use `lando start` to initialize the project. You may need to answer `y` to one or more questions during the initialization.
 
-The project automatically clones the latest version of the Bedrock boilerplate and adds Wunder-specific additions to it.
+```
+$ composer create-project wunderio/wp-project project-name
+```
+
+The project automatically clones the latest version of the Bedrock boilerplate and adds Wunder-specific additions to it. The script also asks for some additional information like the wanted local domain name etc. during the creation.
