@@ -6,7 +6,7 @@ echo "Let's create a new WordPress project"
 echo
 
 # Check for dependencies
-declare -a DEPENDENCIES=("composer" "jq" "lando")
+declare -a DEPENDENCIES=("composer" "jq")
 
 for DEPENDENCY in "${DEPENDENCIES[@]}"; do
     if ! command -v $DEPENDENCY &> /dev/null; then
@@ -15,27 +15,20 @@ for DEPENDENCY in "${DEPENDENCIES[@]}"; do
     fi
 done
 
-# Get the current directory name and use it as the project name default
-PROJECT_NAME=${PWD##*/}
+git config --global --add safe.directory '*'
 
-# Ask the user for the Lando domain name
-echo "Enter a domain name prefix for Lando [$PROJECT_NAME]: "
-read DOMAIN_NAME
-echo
-
-# If the user didn't enter a domain name, use the project name
-if [ -z "$DOMAIN_NAME" ]; then
-    DOMAIN_NAME=$PROJECT_NAME
-fi
-
-# Install the Bedrock WordPress boilerplate
+# # Install the Bedrock WordPress boilerplate
 composer create-project roots/bedrock temp
+
+# Give temporary directory permissions
+chmod 777 temp
 
 # Move into the temporary directory
 cd temp
 
-# Patch application.php to use dynamic URLs with resources/application.php.patch.1
+# Patch application.php
 patch -p1 -N < ../resources/application.php.patch.1
+patch -p1 -N < ../resources/application.php.patch.2
 
 # Define a function to append a value to composer.json scripts array of a given key (or create it if it doesn't exist)
 function composer_scripts_add {
@@ -76,18 +69,13 @@ composer require -n \
     wpackagist-plugin/redis-cache \
     wpackagist-plugin/query-monitor \
     koodimonni-language/core-fi \
-    koodimonni/composer-dropin-installer
+    koodimonni/composer-dropin-installer \
+    10up/elasticpress
 
 # Move all to root directory
 cp -r * ../
 cd ../
 rm -rf temp
-
-# Replace the domain name in the Lando config
-sed -i '' "s/%PROJECT_NAME%/$DOMAIN_NAME/g" .lando/.lando.yml
-
-# Move the Lando config to the root directory
-mv .lando/.lando.yml .
 
 # Remove this script
 rm create-wp-project.sh

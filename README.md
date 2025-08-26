@@ -4,11 +4,11 @@ This repository builds a new WordPress project based on the popular [Bedrock boi
 
 ## Prerequisites
 
-You need to have [Composer](https://getcomposer.org/), [jq](https://github.com/jqlang/jq) and [Lando](https://lando.dev/) installed before creating a project.
+You need to have [Lando](https://lando.dev/) installed before creating a project.
 
 ## Getting started
 
-Create a new project using Composer:
+Update the project name to `.lando.yml` and then just use `lando start` to initialize the project. You may need to answer `y` to one or more questions during the initialization.
 
 ```
 $ composer create-project wunderio/wp-project project-name

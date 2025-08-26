@@ -1,0 +1,37 @@
+version: 2.1
+
+orbs:
+  silta: silta/silta@1
+
+executors:
+  cicd82:
+    docker:
+      - image: wunderio/silta-cicd:circleci-php8.2-node18-composer2-v1
+    resource_class: small
+
+workflows:
+  commit:
+    jobs:
+      # Build and deploy job for feature environments.
+      # Other jobs defined below extend this job.
+      - silta/frontend-build-deploy: &build-deploy
+          name: Silta build & deploy
+          context: silta_dev
+          silta_config: silta/silta.yml
+          codebase-build:
+            - run:
+                name: Install composer dependencies
+                command: composer install -n --prefer-dist --ignore-platform-reqs --no-dev --optimize-autoloader
+          image_build_steps:
+            - silta/build-docker-image:
+                dockerfile: silta/php.Dockerfile
+                path: .
+                identifier: php
+            - silta/build-docker-image:
+                dockerfile: silta/static.Dockerfile
+                path: .
+                identifier: static
+          filters:
+            branches:
+              only:
+                - main
