@@ -12,6 +12,10 @@
 /web/app/cache/*
 /web/wp/*
 
+# local environment
+.ddev/.db
+.ddev/.global-docker
+
 # Ignore database dumps
 *.sql
 *.sql.gz
@@ -27,4 +31,4 @@
 /.env
 
 # Ignore node modules
-node_modules
+node_modules.env
